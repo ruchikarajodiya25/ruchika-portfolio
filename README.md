@@ -1,15 +1,15 @@
 # Ruchika Rajodiya
-Software Engineer | Full-Stack & Backend Developer
+**Full-Stack Software Engineer (Frontend & Backend)**
 
-I build practical web and backend applications with a focus on clean APIs, reliable data handling, and simple user experiences.  
-I have hands-on internship experience working on real codebases, debugging issues, writing tests, and collaborating in Agile teams.
+I build full-stack web applications with a strong focus on clean user interfaces, well-designed APIs, and reliable backend systems.  
+I have hands-on experience working on real projects, implementing features end-to-end, fixing bugs, writing tests, and collaborating in Agile teams.
 
 ---
 
 ## About Me
-- Full-stack mindset with strong backend interest  
-- Comfortable with APIs, databases, and end-to-end features  
-- I like building software that is easy to use and easy to maintain  
+- Strong full-stack mindset covering both frontend and backend development  
+- Comfortable designing APIs, handling data, and connecting UI with backend services  
+- I enjoy building applications that are simple to use, scalable, and easy to maintain  
 
 ---
 
@@ -22,36 +22,30 @@ I have hands-on internship experience working on real codebases, debugging issue
 
 ---
 
-## Projects
+## Full-Stack Projects
 
 ### Online Temple Management System
-Admin-focused system for managing member records, service scheduling, and reporting.
-- Built CRUD modules with search and filtering
-- Added validation on UI and backend to reduce data-entry errors
-- Improved admin workflow and overall usability  
+A full-stack admin system built to manage members, services, and reports.
+- Designed frontend UI for admin workflows  
+- Implemented backend APIs with full CRUD functionality  
+- Integrated search, filtering, and validation across frontend and backend  
+- Improved usability and reduced manual data entry  
+
 **Tech Stack:** React, Node.js, SQL  
 **Repo:** (add link once uploaded)  
 **Live Demo:** (optional)
 
 ---
 
-### COVID Tracking & News API
-Backend APIs that fetch, process, and serve COVID statistics and related news.
-- Designed RESTful APIs and consistent JSON responses
-- Processed external data sources and handled edge cases
-- Wrote unit tests using pytest to improve reliability  
-**Tech Stack:** Python, REST APIs, pytest  
+### COVID Tracking & News Application
+A full-stack application to display COVID statistics and related news.
+- Built backend REST APIs to fetch and process external data  
+- Connected APIs with frontend components to display real-time data  
+- Implemented consistent API responses and error handling  
+- Wrote unit tests to improve backend reliability  
+
+**Tech Stack:** Python, REST APIs, Frontend Integration  
 **Repo:** (add link once uploaded)
-
----
-
-### GA-13 Electoral & Demographic Analysis
-Data analysis project to identify demographic and electoral trends.
-- Built Python pipelines to clean and merge large datasets
-- Created visual summaries to communicate trends clearly
-- Presented results in a simple format for non-technical audiences  
-**Tech Stack:** Python, Data Processing, Visualization  
-**Repo:** (optional)
 
 ---
 
