@@ -52,3 +52,125 @@ export interface ApiResponse<T> {
   message?: string
   errors: string[]
 }
+
+export interface ServiceDto {
+  id: string
+  name: string
+  description?: string
+  price: number
+  durationMinutes: number
+  category?: string
+  taxCategory?: string
+  taxRate: number
+  isActive: boolean
+  createdAt: string
+  updatedAt?: string
+}
+
+export interface AppointmentDto {
+  id: string
+  customerId: string
+  customerName?: string
+  serviceId?: string
+  serviceName?: string
+  staffId?: string
+  staffName?: string
+  locationId: string
+  locationName?: string
+  scheduledStart: string
+  scheduledEnd: string
+  status: string
+  notes?: string
+  internalNotes?: string
+  createdAt: string
+  updatedAt?: string
+}
+
+export interface WorkOrderDto {
+  id: string
+  workOrderNumber: string
+  customerId: string
+  customerName?: string
+  appointmentId?: string
+  assignedToUserId?: string
+  locationId: string
+  status: string
+  description?: string
+  internalNotes?: string
+  totalAmount: number
+  startedAt?: string
+  completedAt?: string
+  createdAt: string
+}
+
+export interface ProductDto {
+  id: string
+  name: string
+  description?: string
+  sku?: string
+  category?: string
+  unitPrice: number
+  costPrice: number
+  stockQuantity: number
+  lowStockThreshold: number
+  unit?: string
+  isActive: boolean
+  locationId: string
+  createdAt: string
+}
+
+export interface InvoiceDto {
+  id: string
+  invoiceNumber: string
+  customerId: string
+  customerName?: string
+  workOrderId?: string
+  invoiceDate: string
+  dueDate?: string
+  status: string
+  subTotal: number
+  taxAmount: number
+  discountAmount: number
+  totalAmount: number
+  paidAmount: number
+  items: InvoiceItemDto[]
+  createdAt: string
+}
+
+export interface InvoiceItemDto {
+  id: string
+  itemType: string
+  serviceId?: string
+  productId?: string
+  description: string
+  quantity: number
+  unitPrice: number
+  taxRate: number
+  totalAmount: number
+}
+
+export interface DashboardStatsDto {
+  totalRevenue: number
+  totalAppointments: number
+  activeAppointments: number
+  totalCustomers: number
+  pendingInvoices: number
+  pendingInvoiceAmount: number
+  lowStockProducts: number
+  topServices: TopServiceDto[]
+  recentAppointments: RecentAppointmentDto[]
+}
+
+export interface TopServiceDto {
+  serviceId: string
+  serviceName: string
+  count: number
+  revenue: number
+}
+
+export interface RecentAppointmentDto {
+  id: string
+  customerName: string
+  scheduledStart: string
+  status: string
+}

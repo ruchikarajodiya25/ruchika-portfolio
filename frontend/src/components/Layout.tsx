@@ -8,11 +8,11 @@ export default function Layout() {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Customers', href: '/customers' },
-    { name: 'Appointments', href: '/appointments' },
     { name: 'Services', href: '/services' },
+    { name: 'Appointments', href: '/appointments' },
+    { name: 'Work Orders', href: '/workorders' },
     { name: 'Inventory', href: '/inventory' },
     { name: 'Invoices', href: '/invoices' },
-    { name: 'Reports', href: '/reports' },
   ]
 
   return (

@@ -1,5 +1,16 @@
 import axios, { AxiosInstance, AxiosError } from 'axios'
-import { ApiResponse, AuthResponseDto, CustomerDto, PagedResult } from '../types'
+import {
+  ApiResponse,
+  AuthResponseDto,
+  CustomerDto,
+  PagedResult,
+  ServiceDto,
+  AppointmentDto,
+  WorkOrderDto,
+  ProductDto,
+  InvoiceDto,
+  DashboardStatsDto,
+} from '../types'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
@@ -106,7 +117,70 @@ export const customersApi = {
     searchTerm?: string
     sortBy?: string
     sortDescending?: boolean
-  }) => apiClient.get<PagedResult<CustomerDto>>('/customers', { params }),
+  }) => apiClient.get<PagedResult<CustomerDto>>('/customers', params),
   createCustomer: (data: Partial<CustomerDto>) =>
     apiClient.post<CustomerDto>('/customers', data),
+}
+
+export const servicesApi = {
+  getServices: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    searchTerm?: string
+    category?: string
+    isActive?: boolean
+    sortBy?: string
+    sortDescending?: boolean
+  }) => apiClient.get<PagedResult<ServiceDto>>('/services', params),
+  getService: (id: string) => apiClient.get<ServiceDto>(`/services/${id}`),
+  createService: (data: Partial<ServiceDto>) => apiClient.post<ServiceDto>('/services', data),
+  updateService: (id: string, data: Partial<ServiceDto>) => apiClient.put<ServiceDto>(`/services/${id}`, data),
+  deleteService: (id: string) => apiClient.delete(`/services/${id}`),
+}
+
+export const appointmentsApi = {
+  getAppointments: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    startDate?: string
+    endDate?: string
+    customerId?: string
+    staffId?: string
+    locationId?: string
+    status?: string
+  }) => apiClient.get<PagedResult<AppointmentDto>>('/appointments', params),
+  createAppointment: (data: Partial<AppointmentDto>) => apiClient.post<AppointmentDto>('/appointments', data),
+  updateAppointmentStatus: (id: string, status: string, notes?: string) =>
+    apiClient.put<AppointmentDto>(`/appointments/${id}/status`, { status, notes }),
+}
+
+export const workOrdersApi = {
+  getWorkOrders: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    status?: string
+    customerId?: string
+    assignedToUserId?: string
+  }) => apiClient.get<PagedResult<WorkOrderDto>>('/workorders', params),
+  createWorkOrder: (data: Partial<WorkOrderDto>) => apiClient.post<WorkOrderDto>('/workorders', data),
+}
+
+export const productsApi = {
+  getProducts: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    searchTerm?: string
+    locationId?: string
+    lowStock?: boolean
+  }) => apiClient.get<PagedResult<ProductDto>>('/products', params),
+}
+
+export const invoicesApi = {
+  createInvoiceFromWorkOrder: (workOrderId: string) =>
+    apiClient.post<InvoiceDto>(`/invoices/from-workorder/${workOrderId}`),
+}
+
+export const dashboardApi = {
+  getStats: (params?: { startDate?: string; endDate?: string }) =>
+    apiClient.get<DashboardStatsDto>('/dashboard/stats', params),
 }
