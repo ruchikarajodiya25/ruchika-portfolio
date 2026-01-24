@@ -264,7 +264,7 @@ public static class SeedData
                 SKU = "OIL-5W30-001",
                 UnitPrice = 24.99m,
                 StockQuantity = 50,
-                MinStockLevel = 10,
+                LowStockThreshold = 10,
                 Unit = "Quart",
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
@@ -279,7 +279,7 @@ public static class SeedData
                 SKU = "FILTER-OIL-001",
                 UnitPrice = 8.99m,
                 StockQuantity = 30,
-                MinStockLevel = 5,
+                LowStockThreshold = 5,
                 Unit = "Each",
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
