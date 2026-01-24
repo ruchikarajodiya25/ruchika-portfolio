@@ -13,11 +13,10 @@ export default function WorkOrdersPage() {
     queryFn: () => workOrdersApi.getWorkOrders({ pageNumber: page, pageSize: 10 }),
   })
 
-  const createMutation = useMutation({
-    mutationFn: (workOrder: Partial<WorkOrderDto>) => workOrdersApi.createWorkOrder(workOrder),
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => workOrdersApi.deleteWorkOrder(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workorders'] })
-      setShowCreateModal(false)
     },
   })
 
@@ -48,13 +47,14 @@ export default function WorkOrdersPage() {
       ) : (
         <div className="bg-white shadow overflow-hidden sm:rounded-md">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+              <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order #</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -85,12 +85,18 @@ export default function WorkOrdersPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      onClick={() => {
+                        if (confirm('Are you sure you want to delete this work order?')) {
+                          deleteMutation.mutate(order.id)
+                        }
+                      }}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      Delete
+                    </button>
+                  </td>
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">

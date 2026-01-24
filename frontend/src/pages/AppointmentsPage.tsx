@@ -33,6 +33,13 @@ export default function AppointmentsPage() {
     },
   })
 
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => appointmentsApi.deleteAppointment(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] })
+    },
+  })
+
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
@@ -76,6 +83,7 @@ export default function AppointmentsPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Service</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notes</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -112,13 +120,18 @@ export default function AppointmentsPage() {
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {appointment.notes || '-'}
                     </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button
+                        onClick={() => {
+                          if (confirm('Are you sure you want to delete this appointment?')) {
+                            deleteMutation.mutate(appointment.id)
+                          }
+                        }}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </td>
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">

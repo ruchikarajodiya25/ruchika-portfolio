@@ -75,6 +75,51 @@ public class AppointmentsController : ControllerBase
         return CreatedAtAction(nameof(GetAppointments), new { id = result.Data!.Id }, result);
     }
 
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ApiResponse<AppointmentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AppointmentDto>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<AppointmentDto>>> UpdateAppointment(Guid id, [FromBody] UpdateAppointmentDto dto)
+    {
+        var command = new UpdateAppointmentCommand
+        {
+            Id = id,
+            CustomerId = dto.CustomerId,
+            ServiceId = dto.ServiceId,
+            StaffId = dto.StaffId,
+            LocationId = dto.LocationId,
+            ScheduledStart = dto.ScheduledStart,
+            ScheduledEnd = dto.ScheduledEnd,
+            Notes = dto.Notes,
+            InternalNotes = dto.InternalNotes
+        };
+
+        var result = await _mediator.Send(command);
+        
+        if (!result.Success)
+        {
+            return result.Data == null ? NotFound(result) : BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteAppointment(Guid id)
+    {
+        var command = new DeleteAppointmentCommand { Id = id };
+        var result = await _mediator.Send(command);
+        
+        if (!result.Success)
+        {
+            return NotFound(result);
+        }
+
+        return NoContent();
+    }
+
     [HttpPut("{id}/status")]
     [ProducesResponseType(typeof(ApiResponse<AppointmentDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<ApiResponse<AppointmentDto>>> UpdateAppointmentStatus(Guid id, [FromBody] UpdateAppointmentStatusCommand command)

@@ -63,6 +63,44 @@ public class WorkOrdersController : ControllerBase
             return BadRequest(result);
         }
 
-        return CreatedAtAction(nameof(GetWorkOrders), new { id = result.Data!.Id }, result);
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ApiResponse<WorkOrderDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<WorkOrderDto>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<WorkOrderDto>>> UpdateWorkOrder(Guid id, [FromBody] UpdateWorkOrderDto dto)
+    {
+        var command = new UpdateWorkOrderCommand
+        {
+            Id = id,
+            AssignedToUserId = dto.AssignedToUserId,
+            Status = dto.Status,
+            Description = dto.Description,
+            InternalNotes = dto.InternalNotes
+        };
+
+        var result = await _mediator.Send(command);
+        
+        if (!result.Success)
+        {
+            return result.Data == null ? NotFound(result) : BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteWorkOrder(Guid id)
+    {
+        var command = new DeleteWorkOrderCommand { Id = id };
+        var result = await _mediator.Send(command);
+        
+        if (!result.Success)
+        {
+            return NotFound(result);
+        }
+
+        return NoContent();
     }
 }

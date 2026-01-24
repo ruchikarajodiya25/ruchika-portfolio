@@ -118,8 +118,12 @@ export const customersApi = {
     sortBy?: string
     sortDescending?: boolean
   }) => apiClient.get<PagedResult<CustomerDto>>('/customers', params),
+  getCustomer: (id: string) => apiClient.get<CustomerDto>(`/customers/${id}`),
   createCustomer: (data: Partial<CustomerDto>) =>
     apiClient.post<CustomerDto>('/customers', data),
+  updateCustomer: (id: string, data: Partial<CustomerDto>) =>
+    apiClient.put<CustomerDto>(`/customers/${id}`, data),
+  deleteCustomer: (id: string) => apiClient.delete(`/customers/${id}`),
 }
 
 export const servicesApi = {
@@ -150,6 +154,9 @@ export const appointmentsApi = {
     status?: string
   }) => apiClient.get<PagedResult<AppointmentDto>>('/appointments', params),
   createAppointment: (data: Partial<AppointmentDto>) => apiClient.post<AppointmentDto>('/appointments', data),
+  updateAppointment: (id: string, data: Partial<AppointmentDto>) =>
+    apiClient.put<AppointmentDto>(`/appointments/${id}`, data),
+  deleteAppointment: (id: string) => apiClient.delete(`/appointments/${id}`),
   updateAppointmentStatus: (id: string, status: string, notes?: string) =>
     apiClient.put<AppointmentDto>(`/appointments/${id}/status`, { status, notes }),
 }
@@ -163,6 +170,9 @@ export const workOrdersApi = {
     assignedToUserId?: string
   }) => apiClient.get<PagedResult<WorkOrderDto>>('/workorders', params),
   createWorkOrder: (data: Partial<WorkOrderDto>) => apiClient.post<WorkOrderDto>('/workorders', data),
+  updateWorkOrder: (id: string, data: Partial<WorkOrderDto>) =>
+    apiClient.put<WorkOrderDto>(`/workorders/${id}`, data),
+  deleteWorkOrder: (id: string) => apiClient.delete(`/workorders/${id}`),
 }
 
 export const productsApi = {
@@ -173,6 +183,11 @@ export const productsApi = {
     locationId?: string
     lowStock?: boolean
   }) => apiClient.get<PagedResult<ProductDto>>('/products', params),
+  getProduct: (id: string) => apiClient.get<ProductDto>(`/products/${id}`),
+  createProduct: (data: Partial<ProductDto>) => apiClient.post<ProductDto>('/products', data),
+  updateProduct: (id: string, data: Partial<ProductDto>) =>
+    apiClient.put<ProductDto>(`/products/${id}`, data),
+  deleteProduct: (id: string) => apiClient.delete(`/products/${id}`),
 }
 
 export const invoicesApi = {
