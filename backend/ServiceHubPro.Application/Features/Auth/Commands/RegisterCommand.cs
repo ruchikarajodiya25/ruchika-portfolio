@@ -5,6 +5,7 @@ using ServiceHubPro.Application.DTOs.Auth;
 using ServiceHubPro.Application.DTOs;
 using ServiceHubPro.Domain.Entities;
 using ServiceHubPro.Infrastructure.Data;
+using ServiceHubPro.Infrastructure.Entities;
 using ServiceHubPro.Infrastructure.Services;
 
 namespace ServiceHubPro.Application.Features.Auth.Commands;

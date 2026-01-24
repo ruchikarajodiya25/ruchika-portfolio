@@ -8,6 +8,7 @@ using ServiceHubPro.Application;
 using ServiceHubPro.Domain.Entities;
 using ServiceHubPro.Infrastructure;
 using ServiceHubPro.Infrastructure.Data;
+using ServiceHubPro.Infrastructure.Entities;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);

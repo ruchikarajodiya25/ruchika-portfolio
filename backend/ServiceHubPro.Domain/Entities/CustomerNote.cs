@@ -13,5 +13,5 @@ public class CustomerNote : BaseEntity, ITenantEntity
     // Navigation properties
     public Tenant Tenant { get; set; } = null!;
     public Customer Customer { get; set; } = null!;
-    public ApplicationUser? CreatedByUser { get; set; }
+    // Note: ApplicationUser navigation is in Infrastructure layer to maintain Clean Architecture
 }

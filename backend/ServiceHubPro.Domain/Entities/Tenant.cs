@@ -19,7 +19,7 @@ public class Tenant : BaseEntity
     public string? SettingsJson { get; set; } // Store business settings as JSON
     
     // Navigation properties
-    public ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
+    // Note: ApplicationUser navigation is in Infrastructure layer to maintain Clean Architecture
     public ICollection<Location> Locations { get; set; } = new List<Location>();
     public ICollection<Customer> Customers { get; set; } = new List<Customer>();
     public ICollection<Service> Services { get; set; } = new List<Service>();

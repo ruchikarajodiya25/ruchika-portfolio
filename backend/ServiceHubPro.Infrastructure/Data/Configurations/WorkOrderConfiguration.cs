@@ -25,5 +25,11 @@ public class WorkOrderConfiguration : IEntityTypeConfiguration<WorkOrder>
             .WithMany(c => c.WorkOrders)
             .HasForeignKey(w => w.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // AssignedToUser relationship (ApplicationUser is in Infrastructure layer)
+        builder.HasOne<ServiceHubPro.Infrastructure.Entities.ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(w => w.AssignedToUserId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

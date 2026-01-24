@@ -27,7 +27,8 @@ public class CustomerNoteConfiguration : IEntityTypeConfiguration<CustomerNote>
             .HasForeignKey(cn => cn.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(cn => cn.CreatedByUser)
+        // CreatedByUser relationship (ApplicationUser is in Infrastructure layer)
+        builder.HasOne<ServiceHubPro.Infrastructure.Entities.ApplicationUser>()
             .WithMany()
             .HasForeignKey(cn => cn.CreatedByUserId)
             .OnDelete(DeleteBehavior.SetNull);

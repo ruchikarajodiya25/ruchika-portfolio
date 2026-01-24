@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ServiceHubPro.Domain.Common;
 using ServiceHubPro.Domain.Entities;
+using ServiceHubPro.Infrastructure.Entities;
 using ServiceHubPro.Infrastructure.Services;
 using System.Linq.Expressions;
 

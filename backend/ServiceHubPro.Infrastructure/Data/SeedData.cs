@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServiceHubPro.Domain.Entities;
 using ServiceHubPro.Infrastructure.Data;
+using ServiceHubPro.Infrastructure.Entities;
 
 namespace ServiceHubPro.Infrastructure.Data;
 

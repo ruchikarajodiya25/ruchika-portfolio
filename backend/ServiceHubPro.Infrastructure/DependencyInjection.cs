@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using ServiceHubPro.Domain.Entities;
 using ServiceHubPro.Infrastructure.Data;
+using ServiceHubPro.Infrastructure.Entities;
 using ServiceHubPro.Infrastructure.Services;
 using System.Text;
 

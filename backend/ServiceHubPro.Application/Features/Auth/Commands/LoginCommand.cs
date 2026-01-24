@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using ServiceHubPro.Application.Common.Models;
 using ServiceHubPro.Application.DTOs.Auth;
 using ServiceHubPro.Application.DTOs;
-using ServiceHubPro.Domain.Entities;
+using ServiceHubPro.Infrastructure.Entities;
 using ServiceHubPro.Infrastructure.Services;
 
 namespace ServiceHubPro.Application.Features.Auth.Commands;
