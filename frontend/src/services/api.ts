@@ -10,6 +10,10 @@ import {
   ProductDto,
   InvoiceDto,
   DashboardStatsDto,
+  PaymentDto,
+  NotificationDto,
+  LocationDto,
+  UserDto,
 } from '../types'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
@@ -191,6 +195,14 @@ export const productsApi = {
 }
 
 export const invoicesApi = {
+  getInvoices: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    customerId?: string
+    status?: string
+    startDate?: string
+    endDate?: string
+  }) => apiClient.get<PagedResult<InvoiceDto>>('/invoices', params),
   createInvoiceFromWorkOrder: (workOrderId: string) =>
     apiClient.post<InvoiceDto>(`/invoices/from-workorder/${workOrderId}`),
 }
@@ -198,4 +210,56 @@ export const invoicesApi = {
 export const dashboardApi = {
   getStats: (params?: { startDate?: string; endDate?: string }) =>
     apiClient.get<DashboardStatsDto>('/dashboard/stats', params),
+}
+
+export const paymentsApi = {
+  getPayments: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    invoiceId?: string
+    startDate?: string
+    endDate?: string
+    paymentMethod?: string
+  }) => apiClient.get<PagedResult<PaymentDto>>('/payments', params),
+  createPayment: (data: {
+    invoiceId: string
+    amount: number
+    paymentMethod: string
+    referenceNumber?: string
+    notes?: string
+    paymentDate?: string
+  }) => apiClient.post<PaymentDto>('/payments', data),
+}
+
+export const notificationsApi = {
+  getNotifications: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    isRead?: boolean
+    type?: string
+  }) => apiClient.get<PagedResult<NotificationDto>>('/notifications', params),
+  markAsRead: (id: string) => apiClient.put(`/notifications/${id}/read`),
+  markAllAsRead: () => apiClient.put('/notifications/mark-all-read'),
+}
+
+export const locationsApi = {
+  getLocations: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    isActive?: boolean
+  }) => apiClient.get<PagedResult<LocationDto>>('/locations', params),
+  createLocation: (data: Partial<LocationDto>) => apiClient.post<LocationDto>('/locations', data),
+  updateLocation: (id: string, data: Partial<LocationDto>) =>
+    apiClient.put<LocationDto>(`/locations/${id}`, data),
+  deleteLocation: (id: string) => apiClient.delete(`/locations/${id}`),
+}
+
+export const usersApi = {
+  getUsers: (params?: {
+    pageNumber?: number
+    pageSize?: number
+    searchTerm?: string
+    isActive?: boolean
+    role?: string
+  }) => apiClient.get<PagedResult<UserDto>>('/users', params),
 }

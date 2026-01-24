@@ -8,6 +8,10 @@ import AppointmentsPage from './pages/AppointmentsPage'
 import WorkOrdersPage from './pages/WorkOrdersPage'
 import InventoryPage from './pages/InventoryPage'
 import InvoicesPage from './pages/InvoicesPage'
+import PaymentsPage from './pages/PaymentsPage'
+import NotificationsPage from './pages/NotificationsPage'
+import LocationsPage from './pages/LocationsPage'
+import UsersPage from './pages/UsersPage'
 import Layout from './components/Layout'
 
 function App() {
@@ -25,6 +29,10 @@ function App() {
         <Route path="workorders" element={<WorkOrdersPage />} />
         <Route path="inventory" element={<InventoryPage />} />
         <Route path="invoices" element={<InvoicesPage />} />
+        <Route path="payments" element={<PaymentsPage />} />
+        <Route path="notifications" element={<NotificationsPage />} />
+        <Route path="locations" element={<LocationsPage />} />
+        <Route path="users" element={<UsersPage />} />
         <Route path="*" element={<Navigate to="/dashboard" />} />
       </Route>
     </Routes>

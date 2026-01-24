@@ -174,3 +174,41 @@ export interface RecentAppointmentDto {
   scheduledStart: string
   status: string
 }
+
+export interface PaymentDto {
+  id: string
+  paymentNumber: string
+  invoiceId: string
+  paymentDate: string
+  amount: number
+  paymentMethod: string
+  referenceNumber?: string
+  notes?: string
+  createdAt: string
+}
+
+export interface NotificationDto {
+  id: string
+  type: string
+  title: string
+  message: string
+  isRead: boolean
+  readAt?: string
+  linkUrl?: string
+  relatedEntityType?: string
+  relatedEntityId?: string
+  createdAt: string
+}
+
+export interface LocationDto {
+  id: string
+  name: string
+  address?: string
+  city?: string
+  state?: string
+  zipCode?: string
+  phone?: string
+  email?: string
+  isActive: boolean
+  createdAt: string
+}

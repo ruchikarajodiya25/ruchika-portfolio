@@ -7,9 +7,7 @@ using ServiceHubPro.API.Middleware;
 using ServiceHubPro.Application;
 using ServiceHubPro.Domain.Entities;
 using ServiceHubPro.Infrastructure;
-using ServiceHubPro.Infrastructure.Data;
-using ServiceHubPro.Infrastructure.Entities;
-using System.Text.Json.Serialization;
+using ServiceHubPro.Infrastructure.BackgroundJobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +78,10 @@ builder.Services.AddCors(options =>
 // Add Application and Infrastructure layers
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// Register background services
+builder.Services.AddHostedService<AppointmentReminderService>();
+builder.Services.AddHostedService<LowStockAlertService>();
 
 var app = builder.Build();
 
