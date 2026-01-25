@@ -14,15 +14,37 @@ I have hands-on experience working on real projects, implementing features end-t
 ---
 
 ## Technical Skills
-- **Frontend:** React, HTML, CSS, Tailwind  
-- **Backend:** Node.js, REST APIs, ASP.NET MVC  
-- **Languages:** JavaScript, Python, C#, Java  
-- **Databases:** PostgreSQL, SQL Server, MongoDB  
-- **Tools:** Git, GitHub, Postman, JIRA, pytest  
+- **Frontend:** React, TypeScript, HTML, CSS, TailwindCSS, Vite, React Query  
+- **Backend:** ASP.NET Core, Node.js, REST APIs, ASP.NET MVC, CQRS (MediatR)  
+- **Languages:** JavaScript, TypeScript, Python, C#, Java  
+- **Databases:** SQL Server, PostgreSQL, MongoDB, Entity Framework Core  
+- **Architecture:** Clean Architecture, Multi-Tenant Systems, Microservices Patterns  
+- **Tools:** Git, GitHub, Postman, JIRA, pytest, xUnit, Playwright  
 
 ---
 
 ## Full-Stack Projects
+
+### ServiceHub Pro - Multi-Tenant Business Operations Platform
+A production-style, full-stack multi-tenant platform for managing business operations including customers, appointments, work orders, inventory, invoicing, and payments.
+
+- **Architecture**: Clean Architecture with CQRS pattern (ASP.NET Core 8 + React 18)
+- **Backend**: ASP.NET Core 8 Web API, Entity Framework Core, SQL Server, JWT Authentication
+- **Frontend**: React 18, TypeScript, Vite, TailwindCSS, React Query
+- **Features**: Multi-tenant architecture, RBAC, Work Orders with items, Invoice generation with PDF, Payments, Dashboard analytics
+- **Key Achievements**:
+  - Implemented 13+ modules with full CRUD operations
+  - Built multi-tenant architecture with tenant isolation at database level
+  - Created invoice generation system with PDF download capability
+  - Implemented work order management with dynamic item addition
+  - Fixed complex EF Core relationship issues and cascade path errors
+  - Optimized frontend performance with React Query caching strategies
+
+**Tech Stack:** ASP.NET Core 8, C#, Entity Framework Core, SQL Server, React, TypeScript, TailwindCSS, React Query  
+**Repo:** [ServiceHub Pro Repository](https://github.com/ruchikarajodiya25/ruchika-portfolio)  
+**Documentation:** See `PROJECT_README.md` and `HOW_TO_RUN.md` for detailed documentation
+
+---
 
 ### Online Temple Management System
 A full-stack admin system built to manage members, services, and reports.
