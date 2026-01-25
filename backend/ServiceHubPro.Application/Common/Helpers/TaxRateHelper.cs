@@ -3,16 +3,12 @@ namespace ServiceHubPro.Application.Common.Helpers;
 /// <summary>
 /// Helper class for tax rate calculations.
 /// Tax rates are stored as percent (0-100), e.g., 8 for 8%.
-/// When calculating, divide by 100 to get decimal fraction.
 /// </summary>
 public static class TaxRateHelper
 {
     /// <summary>
-    /// Converts tax rate from percent to decimal fraction for calculations.
-    /// Examples:
-    /// - 8 => 0.08
-    /// - 5 => 0.05
-    /// - 0 => 0
+    /// Converts tax rate from percent (0-100) to decimal fraction (0-1).
+    /// Example: 8 (percent) -> 0.08 (decimal fraction)
     /// </summary>
     public static decimal GetDecimalFraction(decimal taxRatePercent)
     {
@@ -21,7 +17,7 @@ public static class TaxRateHelper
 
     /// <summary>
     /// Calculates the total amount for an item including tax.
-    /// Formula: (quantity * unitPrice) * (1 + taxRatePercent/100)
+    /// Formula: (quantity * unitPrice) * (1 + taxRate/100)
     /// </summary>
     public static decimal CalculateItemTotal(decimal quantity, decimal unitPrice, decimal taxRatePercent)
     {
@@ -30,8 +26,8 @@ public static class TaxRateHelper
     }
 
     /// <summary>
-    /// Calculates tax amount for an item.
-    /// Formula: (quantity * unitPrice) * (taxRatePercent/100)
+    /// Calculates the tax amount for an item.
+    /// Formula: (quantity * unitPrice) * (taxRate/100)
     /// </summary>
     public static decimal CalculateTaxAmount(decimal quantity, decimal unitPrice, decimal taxRatePercent)
     {
