@@ -101,8 +101,7 @@ public class GetServicesQueryHandler : IRequestHandler<GetServicesQuery, ApiResp
             Items = services,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            PageSize = request.PageSize
         };
 
         return ApiResponse<PagedResult<ServiceDto>>.SuccessResponse(result);

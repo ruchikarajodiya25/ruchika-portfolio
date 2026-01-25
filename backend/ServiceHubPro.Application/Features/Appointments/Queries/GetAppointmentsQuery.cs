@@ -101,8 +101,7 @@ public class GetAppointmentsQueryHandler : IRequestHandler<GetAppointmentsQuery,
             Items = appointments,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            PageSize = request.PageSize
         };
 
         return ApiResponse<PagedResult<AppointmentDto>>.SuccessResponse(result);

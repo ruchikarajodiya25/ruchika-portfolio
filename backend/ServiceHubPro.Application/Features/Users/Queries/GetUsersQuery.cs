@@ -89,8 +89,7 @@ public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ApiResponse<P
             Items = userDtos,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            PageSize = request.PageSize
         };
 
         return ApiResponse<PagedResult<UserDto>>.SuccessResponse(result);

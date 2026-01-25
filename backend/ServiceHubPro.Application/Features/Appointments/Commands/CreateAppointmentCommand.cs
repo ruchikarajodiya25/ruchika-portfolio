@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ServiceHubPro.Application.Common.Models;
 using ServiceHubPro.Application.DTOs;
+using ServiceHubPro.Domain.Entities;
 using ServiceHubPro.Infrastructure.Data;
 using ServiceHubPro.Infrastructure.Services;
 

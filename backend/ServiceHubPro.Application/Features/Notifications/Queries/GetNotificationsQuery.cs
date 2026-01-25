@@ -76,8 +76,7 @@ public class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuer
             Items = notifications,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            PageSize = request.PageSize
         };
 
         return ApiResponse<PagedResult<NotificationDto>>.SuccessResponse(result);

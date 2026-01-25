@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Text.Json.Serialization;
 using ServiceHubPro.API.Middleware;
 using ServiceHubPro.Application;
 using ServiceHubPro.Domain.Entities;

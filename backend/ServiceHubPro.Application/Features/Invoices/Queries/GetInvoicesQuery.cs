@@ -104,8 +104,7 @@ public class GetInvoicesQueryHandler : IRequestHandler<GetInvoicesQuery, ApiResp
             Items = invoices,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            PageSize = request.PageSize
         };
 
         return ApiResponse<PagedResult<InvoiceDto>>.SuccessResponse(result);

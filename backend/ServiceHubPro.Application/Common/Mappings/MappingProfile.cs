@@ -1,5 +1,6 @@
 using AutoMapper;
 using ServiceHubPro.Application.DTOs;
+using ServiceHubPro.Application.DTOs.Auth;
 using ServiceHubPro.Domain.Entities;
 using ServiceHubPro.Infrastructure.Entities;
 

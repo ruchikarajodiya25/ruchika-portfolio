@@ -90,14 +90,16 @@ public class CreateInvoiceFromWorkOrderCommandHandler : IRequestHandler<CreateIn
             var invoiceItem = new InvoiceItem
             {
                 Id = Guid.NewGuid(),
+                TenantId = tenantId.Value,
                 InvoiceId = invoice.Id,
                 ItemType = item.ItemType,
-                ItemId = item.ServiceId ?? item.ProductId ?? Guid.Empty,
+                ServiceId = item.ServiceId,
+                ProductId = item.ProductId,
                 Description = item.Description,
                 Quantity = item.Quantity,
                 UnitPrice = item.UnitPrice,
                 TaxRate = item.TaxRate,
-                LineTotal = item.TotalAmount,
+                TotalAmount = item.TotalAmount,
                 CreatedAt = DateTime.UtcNow
             };
             invoice.Items.Add(invoiceItem);

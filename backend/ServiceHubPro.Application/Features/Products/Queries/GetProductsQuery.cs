@@ -79,7 +79,8 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, ApiResp
                 Unit = p.Unit,
                 IsActive = p.IsActive,
                 LocationId = p.LocationId,
-                CreatedAt = p.CreatedAt
+                CreatedAt = p.CreatedAt,
+                UpdatedAt = p.UpdatedAt
             })
             .ToListAsync(cancellationToken);
 
@@ -88,8 +89,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, ApiResp
             Items = products,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            PageSize = request.PageSize
         };
 
         return ApiResponse<PagedResult<ProductDto>>.SuccessResponse(result);

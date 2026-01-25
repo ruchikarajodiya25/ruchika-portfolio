@@ -63,6 +63,9 @@ public class WorkOrdersController : ControllerBase
             return BadRequest(result);
         }
 
+        return CreatedAtAction(nameof(GetWorkOrders), new { id = result.Data!.Id }, result);
+    }
+
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ApiResponse<WorkOrderDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<WorkOrderDto>), StatusCodes.Status400BadRequest)]

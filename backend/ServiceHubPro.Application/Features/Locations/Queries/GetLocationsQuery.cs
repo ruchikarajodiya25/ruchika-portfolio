@@ -70,8 +70,7 @@ public class GetLocationsQueryHandler : IRequestHandler<GetLocationsQuery, ApiRe
             Items = locations,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            PageSize = request.PageSize
         };
 
         return ApiResponse<PagedResult<LocationDto>>.SuccessResponse(result);

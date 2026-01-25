@@ -87,8 +87,7 @@ public class GetPaymentsQueryHandler : IRequestHandler<GetPaymentsQuery, ApiResp
             Items = payments,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            PageSize = request.PageSize
         };
 
         return ApiResponse<PagedResult<PaymentDto>>.SuccessResponse(result);
