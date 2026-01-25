@@ -101,6 +101,36 @@ export default function InvoicesPage() {
   const invoices = invoicesData?.data?.data?.items || []
   const totalPages = invoicesData?.data?.data?.totalPages || 0
 
+  // Calculate invoice totals from items if backend total is missing or 0
+  const invoicesWithComputedTotals = useMemo(() => {
+    return invoices.map((invoice: InvoiceDto) => {
+      // If backend provides totalAmount and it's > 0, use it
+      if (invoice.totalAmount && invoice.totalAmount > 0) {
+        return invoice
+      }
+      
+      // Otherwise, calculate from items
+      if (invoice.items && invoice.items.length > 0) {
+        const subtotal = invoice.items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0)
+        const taxAmount = invoice.items.reduce((sum, item) => {
+          const taxDecimal = item.taxRate / 100 // TaxRate is percent (0-100)
+          return sum + (item.quantity * item.unitPrice * taxDecimal)
+        }, 0)
+        const calculatedTotal = subtotal + taxAmount - (invoice.discountAmount || 0)
+        
+        return {
+          ...invoice,
+          totalAmount: calculatedTotal,
+          subTotal: subtotal,
+          taxAmount: taxAmount
+        }
+      }
+      
+      // No items and no backend total - return as-is
+      return invoice
+    })
+  }, [invoices])
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Paid':
@@ -429,7 +459,7 @@ export default function InvoicesPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {invoices.map((invoice: InvoiceDto) => (
+                {invoicesWithComputedTotals.map((invoice: InvoiceDto) => (
                   <tr key={invoice.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {invoice.invoiceNumber}

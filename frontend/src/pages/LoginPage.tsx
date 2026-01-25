@@ -19,7 +19,8 @@ export default function LoginPage() {
       await login(email, password)
       navigate('/dashboard')
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.')
+      // Error message is already formatted in AuthContext
+      setError(err.message || 'Login failed. Please try again.')
     } finally {
       setLoading(false)
     }

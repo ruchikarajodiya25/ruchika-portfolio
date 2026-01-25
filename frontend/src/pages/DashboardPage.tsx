@@ -80,7 +80,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {stats?.lowStockProducts && stats.lowStockProducts > 0 && (
+      {stats?.lowStockProducts !== undefined && stats.lowStockProducts > 0 && (
         <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <p className="text-yellow-800">
             <strong>Alert:</strong> {stats.lowStockProducts} product(s) are running low on stock.

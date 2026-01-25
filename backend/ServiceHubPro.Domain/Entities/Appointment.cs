@@ -16,7 +16,6 @@ public class Appointment : BaseEntity, ITenantEntity
     public string? InternalNotes { get; set; }
     public bool IsReminderSent { get; set; } = false;
     public DateTime? ReminderSentAt { get; set; }
-    public Guid? ConvertedToWorkOrderId { get; set; }
     
     // Navigation properties
     public Tenant Tenant { get; set; } = null!;
@@ -24,5 +23,5 @@ public class Appointment : BaseEntity, ITenantEntity
     public Service? Service { get; set; }
     // Note: ApplicationUser (Staff) navigation is in Infrastructure layer to maintain Clean Architecture
     public Location Location { get; set; } = null!;
-    public WorkOrder? ConvertedToWorkOrder { get; set; }
+    public WorkOrder? WorkOrder { get; set; }
 }

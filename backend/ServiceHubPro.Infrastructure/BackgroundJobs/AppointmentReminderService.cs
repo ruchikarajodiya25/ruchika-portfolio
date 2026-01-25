@@ -43,6 +43,29 @@ public class AppointmentReminderService : BackgroundService
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+        // Check if database is ready
+        if (!await context.Database.CanConnectAsync(cancellationToken))
+        {
+            _logger.LogWarning("Database not available, skipping appointment reminder check");
+            return;
+        }
+
+        // Verify Appointments table exists
+        try
+        {
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync(cancellationToken);
+            if (pendingMigrations.Any())
+            {
+                _logger.LogWarning("Database migrations pending, skipping appointment reminder check");
+                return;
+            }
+        }
+        catch
+        {
+            _logger.LogWarning("Could not check migrations, skipping appointment reminder check");
+            return;
+        }
+
         // Get appointments scheduled for tomorrow
         var tomorrow = DateTime.UtcNow.Date.AddDays(1);
         var appointments = await context.Appointments

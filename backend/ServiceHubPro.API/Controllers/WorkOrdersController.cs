@@ -106,4 +106,51 @@ public class WorkOrdersController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("{workOrderId:guid}/items")]
+    [ProducesResponseType(typeof(ApiResponse<WorkOrderItemDto>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<WorkOrderItemDto>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<WorkOrderItemDto>>> AddWorkOrderItem(Guid workOrderId, [FromBody] CreateWorkOrderItemDto dto)
+    {
+        var command = new AddWorkOrderItemCommand
+        {
+            WorkOrderId = workOrderId,
+            Item = dto
+        };
+
+        var result = await _mediator.Send(command);
+        
+        if (!result.Success)
+        {
+            if (result.Message?.Contains("not found") == true)
+            {
+                return NotFound(result);
+            }
+            return BadRequest(result);
+        }
+
+        return CreatedAtAction(nameof(GetWorkOrders), new { id = workOrderId }, result);
+    }
+
+    [HttpDelete("{workOrderId:guid}/items/{itemId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RemoveWorkOrderItem(Guid workOrderId, Guid itemId)
+    {
+        var command = new RemoveWorkOrderItemCommand
+        {
+            WorkOrderId = workOrderId,
+            ItemId = itemId
+        };
+
+        var result = await _mediator.Send(command);
+        
+        if (!result.Success)
+        {
+            return NotFound(result);
+        }
+
+        return NoContent();
+    }
 }

@@ -16,7 +16,6 @@ public class WorkOrder : BaseEntity, ITenantEntity
     public string? Description { get; set; }
     public string? InternalNotes { get; set; }
     public decimal TotalAmount { get; set; } = 0;
-    public Guid? InvoiceId { get; set; }
     
     // Navigation properties
     public Tenant Tenant { get; set; } = null!;

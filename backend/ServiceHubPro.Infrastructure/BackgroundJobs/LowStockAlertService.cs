@@ -43,6 +43,29 @@ public class LowStockAlertService : BackgroundService
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+        // Check if database is ready
+        if (!await context.Database.CanConnectAsync(cancellationToken))
+        {
+            _logger.LogWarning("Database not available, skipping low stock check");
+            return;
+        }
+
+        // Verify Products table exists
+        try
+        {
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync(cancellationToken);
+            if (pendingMigrations.Any())
+            {
+                _logger.LogWarning("Database migrations pending, skipping low stock check");
+                return;
+            }
+        }
+        catch
+        {
+            _logger.LogWarning("Could not check migrations, skipping low stock check");
+            return;
+        }
+
         // Get products with low stock
         var lowStockProducts = await context.Products
             .Where(p => !p.IsDeleted && 

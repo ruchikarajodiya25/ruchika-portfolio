@@ -1,12 +1,26 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { appointmentsApi } from '../services/api'
 import { format } from 'date-fns'
-import { AppointmentDto } from '../types'
+import { AppointmentDto, CustomerDto, LocationDto, ServiceDto, UserDto } from '../types'
+import { useCustomers } from '../hooks/useCustomers'
+import { useServices } from '../hooks/useServices'
+import { useLocations } from '../hooks/useLocations'
+import { useUsers } from '../hooks/useUsers'
 
 export default function AppointmentsPage() {
   const [page, setPage] = useState(1)
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [formData, setFormData] = useState({
+    customerId: '',
+    serviceId: '',
+    staffId: '',
+    locationId: '',
+    scheduledStart: '',
+    durationMinutes: '30',
+    notes: '',
+    internalNotes: '',
+  })
   const queryClient = useQueryClient()
 
   const startDate = new Date()
@@ -14,6 +28,7 @@ export default function AppointmentsPage() {
   const endDate = new Date()
   endDate.setDate(endDate.getDate() + 30)
 
+  // Fetch appointments
   const { data, isLoading } = useQuery({
     queryKey: ['appointments', page],
     queryFn: () =>
@@ -25,11 +40,61 @@ export default function AppointmentsPage() {
       }),
   })
 
+  // Fetch lookups using hooks
+  const { data: customers = [], isLoading: customersLoading } = useCustomers()
+  const { data: services = [], isLoading: servicesLoading } = useServices()
+  const { data: locations = [], isLoading: locationsLoading } = useLocations()
+  const { data: users = [], isLoading: usersLoading } = useUsers()
+
+  // Create memoized lookup maps
+  const customerById = useMemo(
+    () => new Map(customers.map((c: CustomerDto) => [c.id, `${c.firstName} ${c.lastName}`])),
+    [customers]
+  )
+  const serviceById = useMemo(() => new Map(services.map((s: ServiceDto) => [s.id, s.name])), [services])
+  const locationById = useMemo(() => new Map(locations.map((l: LocationDto) => [l.id, l.name])), [locations])
+  const userById = useMemo(
+    () => new Map(users.map((u: UserDto) => [u.id, `${u.firstName} ${u.lastName}`])),
+    [users]
+  )
+
+  // Check if any lookups are still loading
+  const lookupsLoading = customersLoading || servicesLoading || locationsLoading || usersLoading
+
   const createMutation = useMutation({
-    mutationFn: (appointment: Partial<AppointmentDto>) => appointmentsApi.createAppointment(appointment),
+    mutationFn: (appointment: {
+      customerId: string
+      serviceId?: string
+      staffId?: string
+      locationId: string
+      scheduledStart: string
+      scheduledEnd: string
+      notes?: string
+      internalNotes?: string
+    }) => appointmentsApi.createAppointment(appointment),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] })
       setShowCreateModal(false)
+      setFormData({
+        customerId: '',
+        serviceId: '',
+        staffId: '',
+        locationId: '',
+        scheduledStart: '',
+        durationMinutes: '30',
+        notes: '',
+        internalNotes: '',
+      })
+    },
+    onError: (err: any) => {
+      console.error('❌ Failed to create appointment:', err)
+      if (err.response) {
+        console.error('Response:', err.response.status, err.response.data)
+        const apiResponse = err.response.data
+        alert(apiResponse?.message || `Failed to create appointment: ${err.response.statusText}`)
+      } else {
+        alert('Failed to create appointment. Check console for details.')
+      }
     },
   })
 
@@ -38,23 +103,31 @@ export default function AppointmentsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] })
     },
+    onError: (err: any) => {
+      console.error('❌ Failed to delete appointment:', err)
+      if (err.response) {
+        console.error('Response:', err.response.status, err.response.data)
+        const apiResponse = err.response.data
+        alert(apiResponse?.message || `Failed to delete appointment: ${err.response.statusText}`)
+      }
+    },
   })
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const start = new Date(formData.get('scheduledStart') as string)
-    const duration = parseInt(formData.get('durationMinutes') as string)
+    const start = new Date(formData.scheduledStart)
+    const duration = parseInt(formData.durationMinutes)
     const end = new Date(start.getTime() + duration * 60000)
 
     createMutation.mutate({
-      customerId: formData.get('customerId') as string,
-      serviceId: formData.get('serviceId') as string || undefined,
-      staffId: formData.get('staffId') as string || undefined,
-      locationId: formData.get('locationId') as string,
+      customerId: formData.customerId,
+      serviceId: formData.serviceId || undefined,
+      staffId: formData.staffId || undefined,
+      locationId: formData.locationId,
       scheduledStart: start.toISOString(),
       scheduledEnd: end.toISOString(),
-      notes: formData.get('notes') as string || undefined,
+      notes: formData.notes || undefined,
+      internalNotes: formData.internalNotes || undefined,
     })
   }
 
@@ -99,10 +172,18 @@ export default function AppointmentsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {appointment.customerName || 'N/A'}
+                      {lookupsLoading
+                        ? 'Loading...'
+                        : appointment.customerId
+                        ? customerById.get(appointment.customerId) ?? appointment.customerName ?? 'Unknown'
+                        : appointment.customerName ?? 'Unknown'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {appointment.serviceName || '-'}
+                      {lookupsLoading
+                        ? 'Loading...'
+                        : appointment.serviceId
+                        ? serviceById.get(appointment.serviceId) ?? appointment.serviceName ?? 'Unknown'
+                        : appointment.serviceName ?? 'Unknown'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
@@ -132,62 +213,134 @@ export default function AppointmentsPage() {
                         Delete
                       </button>
                     </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Book Appointment</h2>
             <form onSubmit={handleCreate}>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Customer ID *</label>
-                  <input
+                  <label className="block text-sm font-medium text-gray-700">Customer *</label>
+                  <select
                     name="customerId"
                     required
+                    value={formData.customerId}
+                    onChange={(e) => setFormData({ ...formData, customerId: e.target.value })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-                    placeholder="Enter customer ID"
-                  />
+                  >
+                    <option value="">Select a customer</option>
+                    {customers.map((customer: CustomerDto) => (
+                      <option key={customer.id} value={customer.id}>
+                        {customer.firstName} {customer.lastName} {customer.email ? `(${customer.email})` : ''}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Location ID *</label>
-                  <input
+                  <label className="block text-sm font-medium text-gray-700">Location *</label>
+                  <select
                     name="locationId"
                     required
+                    value={formData.locationId}
+                    onChange={(e) => setFormData({ ...formData, locationId: e.target.value })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-                    placeholder="Enter location ID"
-                  />
+                  >
+                    <option value="">Select a location</option>
+                    {locations.map((location: LocationDto) => (
+                      <option key={location.id} value={location.id}>
+                        {location.name} {location.city ? `(${location.city})` : ''}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Service ID</label>
-                  <input
+                  <label className="block text-sm font-medium text-gray-700">Service (Optional)</label>
+                  <select
                     name="serviceId"
+                    value={formData.serviceId}
+                    onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
-                    placeholder="Optional"
-                  />
+                  >
+                    <option value="">None</option>
+                    {services.map((service: ServiceDto) => (
+                      <option key={service.id} value={service.id}>
+                        {service.name} {service.price ? `($${service.price.toFixed(2)})` : ''}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Staff Member (Optional)</label>
+                  <select
+                    name="staffId"
+                    value={formData.staffId}
+                    onChange={(e) => setFormData({ ...formData, staffId: e.target.value })}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  >
+                    <option value="">None</option>
+                    {users.map((user: UserDto) => (
+                      <option key={user.id} value={user.id}>
+                        {user.firstName} {user.lastName} ({user.email})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Scheduled Start *</label>
                   <input
                     name="scheduledStart"
                     type="datetime-local"
                     required
+                    value={formData.scheduledStart}
+                    onChange={(e) => setFormData({ ...formData, scheduledStart: e.target.value })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Duration (minutes) *</label>
                   <input
                     name="durationMinutes"
                     type="number"
                     required
-                    defaultValue="30"
+                    min="15"
+                    step="15"
+                    value={formData.durationMinutes}
+                    onChange={(e) => setFormData({ ...formData, durationMinutes: e.target.value })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Notes</label>
                   <textarea
                     name="notes"
+                    value={formData.notes}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    rows={3}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Internal Notes</label>
+                  <textarea
+                    name="internalNotes"
+                    value={formData.internalNotes}
+                    onChange={(e) => setFormData({ ...formData, internalNotes: e.target.value })}
+                    rows={2}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
                   />
                 </div>
@@ -195,7 +348,19 @@ export default function AppointmentsPage() {
               <div className="mt-6 flex justify-end space-x-2">
                 <button
                   type="button"
-                  onClick={() => setShowCreateModal(false)}
+                  onClick={() => {
+                    setShowCreateModal(false)
+                    setFormData({
+                      customerId: '',
+                      serviceId: '',
+                      staffId: '',
+                      locationId: '',
+                      scheduledStart: '',
+                      durationMinutes: '30',
+                      notes: '',
+                      internalNotes: '',
+                    })
+                  }}
                   className="px-4 py-2 border rounded-md"
                 >
                   Cancel
@@ -203,7 +368,7 @@ export default function AppointmentsPage() {
                 <button
                   type="submit"
                   disabled={createMutation.isPending}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
                 >
                   {createMutation.isPending ? 'Booking...' : 'Book'}
                 </button>

@@ -17,9 +17,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasIndex(p => new { p.TenantId, p.LocationId });
 
         builder.HasOne(p => p.Tenant)
-            .WithMany()
+            .WithMany(t => t.Products)
             .HasForeignKey(p => p.TenantId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(p => p.Location)
             .WithMany(l => l.Products)

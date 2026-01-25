@@ -214,7 +214,7 @@ public static class SeedData
                 Description = "Standard oil change service",
                 DurationMinutes = 30,
                 Price = 49.99m,
-                TaxRate = 0.08m,
+                TaxRate = 8m, // Store as percent (8 for 8%)
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             },
@@ -226,7 +226,7 @@ public static class SeedData
                 Description = "Rotate all four tires",
                 DurationMinutes = 45,
                 Price = 29.99m,
-                TaxRate = 0.08m,
+                TaxRate = 8m, // Store as percent (8 for 8%)
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             },
@@ -238,7 +238,7 @@ public static class SeedData
                 Description = "Complete brake system inspection",
                 DurationMinutes = 60,
                 Price = 79.99m,
-                TaxRate = 0.08m,
+                TaxRate = 8m, // Store as percent (8 for 8%)
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             }

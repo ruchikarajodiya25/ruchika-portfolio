@@ -9,6 +9,8 @@ using ServiceHubPro.Application;
 using ServiceHubPro.Domain.Entities;
 using ServiceHubPro.Infrastructure;
 using ServiceHubPro.Infrastructure.BackgroundJobs;
+using ServiceHubPro.Infrastructure.Data;
+using ServiceHubPro.Infrastructure.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,7 +102,11 @@ if (app.Environment.IsDevelopment())
 // Add exception handling middleware (should be early in pipeline)
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseHttpsRedirection();
+// Only redirect to HTTPS in Production (disable for local dev to allow HTTP requests)
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("AllowReactApp");
 
@@ -113,29 +119,40 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
 
-        // Ensure database is created
-        if (context.Database.GetPendingMigrations().Any())
+        // Check for pending migrations and apply them
+        var pendingMigrations = context.Database.GetPendingMigrations().ToList();
+        if (pendingMigrations.Any())
         {
+            logger.LogInformation("Applying {Count} pending migration(s)...", pendingMigrations.Count);
             context.Database.Migrate();
+            logger.LogInformation("Migrations applied successfully");
         }
         else if (!context.Database.CanConnect())
         {
-            context.Database.EnsureCreated();
+            logger.LogError("Database does not exist and no migrations available. Please run migrations first.");
+            throw new InvalidOperationException("Database connection failed. Run 'dotnet ef database update' to create the database.");
+        }
+        else
+        {
+            logger.LogInformation("Database is up to date");
         }
 
         // Seed data
         await SeedData.SeedAsync(context, userManager, roleManager);
+        logger.LogInformation("Database seeding completed");
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding the database");
+        logger.LogError(ex, "CRITICAL: Failed to migrate or seed database. Application will not start.");
+        throw; // Fail fast - don't start the app if DB setup fails
     }
 }
 

@@ -33,6 +33,7 @@ public class DeleteWorkOrderCommandHandler : IRequestHandler<DeleteWorkOrderComm
         }
 
         var workOrder = await _context.WorkOrders
+            .Include(w => w.Invoice)
             .FirstOrDefaultAsync(w => w.Id == request.Id && w.TenantId == tenantId.Value && !w.IsDeleted, cancellationToken);
 
         if (workOrder == null)
@@ -41,7 +42,7 @@ public class DeleteWorkOrderCommandHandler : IRequestHandler<DeleteWorkOrderComm
         }
 
         // Don't allow deletion if invoice exists
-        if (workOrder.InvoiceId.HasValue)
+        if (workOrder.Invoice != null)
         {
             return ApiResponse<object>.ErrorResponse("Cannot delete work order that has an associated invoice");
         }

@@ -93,7 +93,9 @@ export interface WorkOrderDto {
   customerName?: string
   appointmentId?: string
   assignedToUserId?: string
+  assignedToUserName?: string
   locationId: string
+  locationName?: string
   status: string
   description?: string
   internalNotes?: string
@@ -101,6 +103,20 @@ export interface WorkOrderDto {
   startedAt?: string
   completedAt?: string
   createdAt: string
+  items?: WorkOrderItemDto[]
+}
+
+export interface WorkOrderItemDto {
+  id: string
+  workOrderId: string
+  itemType: string
+  serviceId?: string
+  productId?: string
+  description: string
+  quantity: number
+  unitPrice: number
+  taxRate: number
+  totalAmount: number
 }
 
 export interface ProductDto {
