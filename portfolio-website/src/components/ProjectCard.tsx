@@ -1,4 +1,4 @@
-import { Project } from '../data/portfolio';
+import type { Project } from '../data/portfolio';
 import { Card } from './Card';
 import { Link } from 'react-router-dom';
 import { ExternalLink, Github } from 'lucide-react';

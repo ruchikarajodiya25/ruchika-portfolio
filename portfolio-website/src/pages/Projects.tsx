@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Search } from 'lucide-react';
 import { Layout } from '../components/Layout';
 import { ProjectCard } from '../components/ProjectCard';
 import { projects } from '../data/portfolio';
-import { getTechColor } from '../utils/helpers';
 
 export const Projects = () => {
   const [searchQuery, setSearchQuery] = useState('');

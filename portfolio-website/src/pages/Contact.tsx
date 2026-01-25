@@ -9,7 +9,6 @@ import { Layout } from '../components/Layout';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { personalInfo } from '../data/portfolio';
-import emailjs from '@emailjs/browser';
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),

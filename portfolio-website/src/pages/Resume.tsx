@@ -18,14 +18,6 @@ export const Resume = () => {
     document.body.removeChild(link);
   };
 
-  const allSkills = [
-    ...personalInfo.skills.languages,
-    ...personalInfo.skills.frontend,
-    ...personalInfo.skills.backend,
-    ...personalInfo.skills.databases,
-    ...personalInfo.skills.tools,
-  ];
-
   return (
     <Layout>
       <Helmet>
