@@ -14,6 +14,7 @@ export const Home = () => {
     ...personalInfo.skills.frontend,
     ...personalInfo.skills.backend,
     ...personalInfo.skills.databases,
+    ...personalInfo.skills.tools,
   ];
 
   return (
@@ -93,7 +94,7 @@ export const Home = () => {
                 Tech Stack
               </h2>
               <div className="flex flex-wrap gap-2">
-                {allSkills.slice(0, 12).map((skill) => (
+                {allSkills.slice(0, 16).map((skill) => (
                   <span
                     key={skill}
                     className={`px-3 py-1 text-sm rounded-full ${getTechColor(skill)}`}

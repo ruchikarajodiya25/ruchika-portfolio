@@ -95,9 +95,9 @@ export const personalInfo: PersonalInfo = {
   skills: {
     languages: ['JavaScript', 'Python', 'C#', 'SQL', 'Java', 'TypeScript', 'HTML5', 'CSS3'],
     frontend: ['React', 'Next.js', 'TailwindCSS', 'HTML/CSS', 'Responsive UI'],
-    backend: ['Node.js', 'Express.js', 'ASP.NET Core', 'ASP.NET MVC', 'FastAPI', 'REST APIs'],
+    backend: ['Node.js', 'Express.js', 'ASP.NET', 'ASP.NET Core', 'ASP.NET MVC', 'FastAPI', 'REST APIs'],
     databases: ['PostgreSQL', 'SQL Server', 'MongoDB'],
-    tools: ['Git', 'GitHub', 'CI/CD', 'Postman', 'Agile/Scrum', 'Docker']
+    tools: ['Git', 'GitHub', 'CI/CD', 'Postman', 'Agile/Scrum', 'Docker', 'AI']
   }
 };
 
