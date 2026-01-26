@@ -37,17 +37,21 @@ export const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="mb-6">
-              <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-700 mb-6 mx-auto md:mx-0 flex items-center justify-center overflow-hidden relative">
+              <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-700 mb-6 mx-auto md:mx-0 overflow-hidden relative flex items-center justify-center">
                 <img
-                  src="/assets/profile.jpg"
+                  src="/profile.jpg"
                   alt="Ruchika Rajodiya"
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
+                    const el = e.target as HTMLImageElement;
+                    el.style.display = 'none';
+                    const span = el.nextElementSibling as HTMLElement | null;
+                    if (span) span.classList.remove('hidden');
                   }}
                 />
-                <span className="text-gray-500 dark:text-gray-400 text-sm absolute">Profile Image</span>
+                <span className="hidden absolute inset-0 flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm pointer-events-none">
+                  Profile Image
+                </span>
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">

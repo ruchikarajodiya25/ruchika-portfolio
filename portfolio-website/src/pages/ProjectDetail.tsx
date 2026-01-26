@@ -1,16 +1,20 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Github, ExternalLink, Calendar, User, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink, Calendar, User, CheckCircle, ImageIcon } from 'lucide-react';
 import { Layout } from '../components/Layout';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { GalleryModal } from '../components/GalleryModal';
 import { projects } from '../data/portfolio';
-import { getTechColor } from '../utils/helpers';
+import { getTechColor, hasValidGithub, hasValidLive } from '../utils/helpers';
 
 export const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const project = projects.find((p) => p.slug === slug);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const hasScreenshots = Boolean(project?.screenshots && project.screenshots.length > 0);
 
   if (!project) {
     return (
@@ -83,17 +87,19 @@ export const ProjectDetail = () => {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" className="flex items-center gap-2">
-                <Github className="w-5 h-5" />
-                View on GitHub
-              </Button>
-            </a>
-            {project.live !== 'https://REPLACE_ME' && (
+            {hasValidGithub(project.github) && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Github className="w-5 h-5" />
+                  GitHub Repo
+                </Button>
+              </a>
+            )}
+            {hasValidLive(project.live) && (
               <a href={project.live} target="_blank" rel="noopener noreferrer">
                 <Button className="flex items-center gap-2">
                   <ExternalLink className="w-5 h-5" />
@@ -101,50 +107,19 @@ export const ProjectDetail = () => {
                 </Button>
               </a>
             )}
+            {hasScreenshots && (
+              <Button
+                type="button"
+                variant="secondary"
+                className="flex items-center gap-2"
+                onClick={() => setGalleryOpen(true)}
+              >
+                <ImageIcon className="w-5 h-5" />
+                View Screenshots
+              </Button>
+            )}
           </div>
         </motion.div>
-
-        {/* Screenshots Gallery */}
-        {project.screenshots.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-12"
-          >
-            <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
-              Screenshots
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {project.screenshots.map((screenshot, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-                >
-                  <img
-                    src={screenshot}
-                    alt={`${project.title} screenshot ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    onError={(e) => {
-                      // Fallback if image doesn't exist
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const placeholder = document.createElement('div');
-                      placeholder.className = 'w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm';
-                      placeholder.textContent = `Screenshot ${index + 1}`;
-                      target.parentElement?.appendChild(placeholder);
-                    }}
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
 
         {/* Tech Stack */}
         <motion.div
@@ -361,6 +336,15 @@ export const ProjectDetail = () => {
           </motion.div>
         )}
       </div>
+
+      {hasScreenshots && (
+        <GalleryModal
+          isOpen={galleryOpen}
+          onClose={() => setGalleryOpen(false)}
+          images={project.screenshots!}
+          title={project.title}
+        />
+      )}
     </Layout>
   );
 };

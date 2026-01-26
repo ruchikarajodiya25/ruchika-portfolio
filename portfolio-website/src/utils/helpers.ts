@@ -29,3 +29,11 @@ export const getTechColor = (tech: string): string => {
   };
   return colors[tech] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
 };
+
+const PLACEHOLDER_URL = 'https://REPLACE_ME';
+
+export const hasValidLive = (url: string): boolean =>
+  Boolean(url && url !== PLACEHOLDER_URL && !url.includes('REPLACE_ME'));
+
+export const hasValidGithub = (url: string): boolean =>
+  Boolean(url && !url.includes('REPLACE_ME'));

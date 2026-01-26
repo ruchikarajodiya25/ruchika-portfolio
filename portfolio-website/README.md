@@ -89,7 +89,7 @@ vercel --prod
 6. Click "Deploy"
 7. Your site will be live at `https://your-project.vercel.app`
 
-**Note:** The `vercel.json` file is already configured for React Router SPA routing.
+**Note:** The `vercel.json` file is already configured for React Router SPA routing. All routes (`/`, `/projects`, `/projects/:slug`, `/resume`, `/contact`) work on Vercel; direct links and refresh use the same rewrite rules.
 
 ### Quick Deployment Steps
 
@@ -127,24 +127,98 @@ For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 ```
 portfolio-website/
 ├── public/
-│   └── resume.pdf          # Your resume PDF
+│   ├── profile.jpg           # Your profile photo (home page)
+│   ├── resume.pdf            # Resume PDF
+│   └── assets/
+│       └── projects/
+│           ├── servicehubpro/   # dashboard.png, customers.png, etc.
+│           ├── temple/          # dashboard.png, members.png, etc.
+│           └── ticket-classifier/ # api.png, swagger.png, results.png
 ├── src/
-│   ├── assets/
-│   │   ├── profile.jpg      # Profile image
-│   │   └── projects/        # Project screenshots
-│   ├── components/          # Reusable components
-│   ├── data/
-│   │   └── portfolio.ts     # All content data
-│   ├── hooks/               # Custom React hooks
-│   ├── pages/               # Page components
-│   ├── utils/               # Utility functions
-│   ├── App.tsx              # Main app component
-│   ├── main.tsx             # Entry point
-│   └── index.css            # Global styles
-├── CONTENT_UPDATE_GUIDE.md   # How to update content
-├── DEPLOYMENT.md            # Deployment instructions
+│   ├── components/
+│   ├── data/portfolio.ts
+│   ├── pages/
+│   └── ...
+├── .env.example              # Copy to .env and add EmailJS keys
 └── package.json
 ```
+
+### Where to place images (production-safe)
+
+- **Profile image:** `public/profile.jpg`  
+  - Served as `/profile.jpg`. Used on the Home page.
+
+- **Project screenshots:** `public/assets/projects/<slug>/<name>.png`  
+  - Examples:  
+    - `public/assets/projects/servicehubpro/dashboard.png` → `/assets/projects/servicehubpro/dashboard.png`  
+    - `public/assets/projects/temple/members.png` → `/assets/projects/temple/members.png`  
+  - Update `screenshots` in `src/data/portfolio.ts` to match these paths (e.g. `'/assets/projects/servicehubpro/dashboard.png'`).
+
+- **Resume PDF:** `public/resume.pdf` → `/resume.pdf`
+
+---
+
+## 📧 EmailJS setup (contact form → Gmail)
+
+The contact form sends messages via [EmailJS](https://www.emailjs.com/). Without it, the form falls back to `mailto:` (opens the user’s email client).
+
+### 1. Create an EmailJS account
+
+1. Go to [https://www.emailjs.com/](https://www.emailjs.com/) and sign up.
+2. Verify your email.
+
+### 2. Add an Email Service (Gmail)
+
+1. **Email Services** → **Add New Service**.
+2. Choose **Gmail**.
+3. Connect your Gmail account and complete the steps.
+4. Copy the **Service ID** (e.g. `service_xxxxx`).
+
+### 3. Create an Email Template
+
+1. **Email Templates** → **Create New Template**.
+2. Set **To Email** to your Gmail: `ruchikarajodiya25@gmail.com`.
+3. Use variables in the template, for example:
+   - **Subject:** `{{subject}}`
+   - **Content:**  
+     `From: {{from_name}} ({{from_email}})`  
+     `Message: {{message}}`
+4. Save and copy the **Template ID** (e.g. `template_xxxxx`).
+
+### 4. Get your Public Key
+
+1. **Account** → **API Keys** (or **General**).
+2. Copy your **Public Key**.
+
+### 5. Local development (.env)
+
+1. Copy the example file:
+   ```bash
+   cp .env.example .env
+   ```
+2. Edit `.env` and set:
+   ```
+   VITE_EMAILJS_SERVICE_ID=your_service_id
+   VITE_EMAILJS_TEMPLATE_ID=your_template_id
+   VITE_EMAILJS_PUBLIC_KEY=your_public_key
+   ```
+3. Restart the dev server (`npm run dev`).  
+   **Do not commit `.env`** — it’s gitignored.
+
+### 6. Vercel (production)
+
+1. Open your project on [Vercel](https://vercel.com) → **Settings** → **Environment Variables**.
+2. Add:
+
+   | Name | Value |
+   |------|--------|
+   | `VITE_EMAILJS_SERVICE_ID` | Your Service ID |
+   | `VITE_EMAILJS_TEMPLATE_ID` | Your Template ID |
+   | `VITE_EMAILJS_PUBLIC_KEY` | Your Public Key |
+
+3. Redeploy (e.g. **Deployments** → **Redeploy** or push a new commit).
+
+Messages from the contact form will be sent to your Gmail via EmailJS. If any of these env vars are missing, the form uses the `mailto:` fallback.
 
 ## 📝 Updating Content
 

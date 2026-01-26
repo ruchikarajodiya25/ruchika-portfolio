@@ -1,3 +1,18 @@
+// ServiceHub Pro screenshots (01.png–13.png in src/assets/projects/)
+import sh01 from '../assets/projects/01.png';
+import sh02 from '../assets/projects/02.png';
+import sh03 from '../assets/projects/03.png';
+import sh04 from '../assets/projects/04.png';
+import sh05 from '../assets/projects/05.png';
+import sh06 from '../assets/projects/06.png';
+import sh07 from '../assets/projects/07.png';
+import sh08 from '../assets/projects/08.png';
+import sh09 from '../assets/projects/09.png';
+import sh10 from '../assets/projects/10.png';
+import sh11 from '../assets/projects/11.png';
+import sh12 from '../assets/projects/12.png';
+import sh13 from '../assets/projects/13.png';
+
 export interface Project {
   id: string;
   slug: string;
@@ -21,7 +36,8 @@ export interface Project {
   results?: string[];
   github: string;
   live: string;
-  screenshots: string[];
+  /** Public URLs, e.g. /assets/projects/slug/name.png. Empty = no screenshots. */
+  screenshots?: string[];
   tags: string[];
 }
 
@@ -151,15 +167,9 @@ export const projects: Project[] = [
       'Scaled to support 100+ concurrent tenants',
       'Improved code maintainability with Clean Architecture'
     ],
-    github: 'https://github.com/REPLACE_ME/servicehub-pro',
+    github: '',
     live: 'https://REPLACE_ME',
-    screenshots: [
-      '/assets/projects/servicehubpro/dashboard.png',
-      '/assets/projects/servicehubpro/customers.png',
-      '/assets/projects/servicehubpro/appointments.png',
-      '/assets/projects/servicehubpro/workorders.png',
-      '/assets/projects/servicehubpro/invoices.png'
-    ],
+    screenshots: [sh01, sh02, sh03, sh04, sh05, sh06, sh07, sh08, sh09, sh10, sh11, sh12, sh13],
     tags: ['React', 'TypeScript', '.NET', 'SQL Server', 'Multi-Tenant', 'Clean Architecture']
   },
   {
@@ -212,14 +222,9 @@ export const projects: Project[] = [
       'Improved query performance by ~35% with optimized stored procedures',
       'Streamlined administrative workflows'
     ],
-    github: 'https://github.com/REPLACE_ME/temple-management',
+    github: '',
     live: 'https://REPLACE_ME',
-    screenshots: [
-      '/assets/projects/temple/dashboard.png',
-      '/assets/projects/temple/members.png',
-      '/assets/projects/temple/services.png',
-      '/assets/projects/temple/admin.png'
-    ],
+    screenshots: [],
     tags: ['.NET', 'ASP.NET MVC', 'SQL Server', 'Bootstrap']
   },
   {
@@ -271,13 +276,9 @@ export const projects: Project[] = [
       'Improved priority assignment accuracy',
       'Enabled data-driven insights through prediction analytics'
     ],
-    github: 'https://github.com/REPLACE_ME/ticket-classifier',
+    github: '',
     live: 'https://REPLACE_ME',
-    screenshots: [
-      '/assets/projects/ticket-classifier/api.png',
-      '/assets/projects/ticket-classifier/swagger.png',
-      '/assets/projects/ticket-classifier/results.png'
-    ],
+    screenshots: [],
     tags: ['Python', 'FastAPI', 'Machine Learning', 'scikit-learn', 'NLP']
   }
 ];
