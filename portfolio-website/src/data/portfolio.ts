@@ -320,7 +320,7 @@ export const education: Education[] = [
     degree: 'Master of Computer Science',
     institution: 'Illinois Institute of Technology',
     location: 'USA',
-    startDate: 'Jan 2023',
+    startDate: 'Jan 2024',
     endDate: 'Dec 2025'
   },
   {
