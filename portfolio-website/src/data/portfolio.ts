@@ -288,7 +288,7 @@ export const experience: Experience[] = [
     title: 'Software Engineer',
     company: 'Destiny Solution Pvt. Ltd',
     location: 'Ahmedabad, India',
-    startDate: 'Sep 2022',
+    startDate: 'May 2020',
     endDate: 'Nov 2023',
     bullets: [
       'Built backend features using C# and ASP.NET MVC for authentication, admin workflows, and business logic',
@@ -297,20 +297,6 @@ export const experience: Experience[] = [
       'Implemented role-based access control for secure user permissions',
       'Debugged issues and improved backend stability and performance',
       'Worked with the team in Agile/Scrum to deliver features on time'
-    ]
-  },
-  {
-    title: 'Python Developer Intern',
-    company: 'Infolabz IT Solution Pvt. Ltd',
-    location: 'Ahmedabad, India',
-    startDate: 'Jun 2022',
-    endDate: 'Jul 2022',
-    bullets: [
-      'Built backend services and REST APIs using Python for data-driven applications',
-      'Processed structured data (JSON) and integrated third-party APIs',
-      'Implemented CRUD operations and optimized database queries',
-      'Wrote unit tests and supported CI-friendly development practices',
-      'Assisted in debugging and improving existing application workflows'
     ]
   }
 ];
